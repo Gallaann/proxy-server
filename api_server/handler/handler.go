@@ -56,6 +56,7 @@ func (h *Handler) RepeatRequestByID(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, resp)
 }
 
+// vulnerability scanner, as mentioned in variant 3 should scan for XXE vulnerability
 func (h *Handler) ScanRequestByID(ctx echo.Context) error {
 	request := h.store.GetRequestByID(ctx.Param("id"))
 	repeatRequest := parser.ParseRepeatRequest(request)
