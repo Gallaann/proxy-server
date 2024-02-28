@@ -1,0 +1,15 @@
+FROM golang:1.21-alpine
+
+WORKDIR /build
+
+COPY go.mod .
+
+RUN go mod download
+
+COPY . .
+
+RUN go build -o /proxy cmd/proxy/main.go
+
+EXPOSE 8081
+
+ENTRYPOINT ["/proxy"]

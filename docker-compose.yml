@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile-api
+    container_name: api
+    ports:
+      - "8001:8001"
+    restart: always
+    networks:
+      - backend-network
+  proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile-proxy
+    # включать https или нет
+    environment:
+      - HTTPS=false
+    container_name: proxy
+    ports:
+      - "8081:8081"
+    restart: always
+    networks:
+      - backend-network
+  mongo:
+    image: mongo
+    container_name: mongo
+    environment:
+      - MONGODB_DATABASE=admin
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+    restart: always
+    networks:
+      - backend-network
+
+volumes:
+  mongo_data: {}
+
+networks:
+  backend-network:
+    name: "backend-network"
+    driver: bridge
